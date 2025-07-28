@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>徐州三日游攻略 - 移动版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=b02ca39029cae7804efb3ad247026c8e"></script>
+    
+    <style>
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 英雄区域 */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+.trip-info {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    background: rgba(255,255,255,0.1);
+    padding: 12px 20px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.info-item i {
+    font-size: 1.2rem;
+}
+
+/* 导航栏 */
+.navigation {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 30px;
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.nav-link:hover {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    background: rgba(102, 126, 234, 0.05);
+}
+
+/* 主要内容区域 */
+.main-content {
+    padding: 40px 0;
+}
+
+section {
+    margin-bottom: 60px;
+}
+
+section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    text-align: center;
+    color: #333;
+    position: relative;
+}
+
+section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+/* 天气预报 */
+.weather-section {
+    background: white;
+    padding: 60px 0;
+    border-radius: 20px;
+    margin: 40px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.weather-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.weather-card {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(116, 185, 255, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.weather-card:hover {
+    transform: translateY(-5px);
+}
+
+.weather-date {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.weather-icon {
+    font-size: 3rem;
+    margin: 20px 0;
+}
+
+.weather-desc {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.weather-temp {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.weather-wind {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* 行程规划 */
+.itinerary-section {
+    background: white;
+    padding: 60px 0;
+    border-radius: 20px;
+    margin: 40px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.day-card {
+    background: #f8f9fa;
+    border-radius: 15px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+
+.day-card:hover {
+    transform: translateY(-3px);
+}
+
+.day-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.day-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.day-date {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.day-content {
+    padding: 30px;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+    display: flex;
+    gap: 20px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -23px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    background: #667eea;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px #667eea;
+}
+
+.timeline-time {
+    font-weight: 600;
+    color: #667eea;
+    font-size: 1.1rem;
+    min-width: 60px;
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-content h4 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.timeline-content p {
+    color: #666;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.attraction-info {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.attraction-info span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    color: #888;
+    background: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+.attraction-info .rating {
+    color: #ff6b6b;
+}
+
+.attraction-info .time {
+    color: #4ecdc4;
+}
+
+.attraction-info .price {
+    color: #45b7d1;
+}
+
+.attraction-info .location {
+    color: #96ceb4;
+}
+
+/* 地图区域 */
+.map-section {
+    background: white;
+    padding: 60px 0;
+    border-radius: 20px;
+    margin: 40px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.map-container {
+    position: relative;
+    height: 500px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+#amap-container {
+    width: 100%;
+    height: 100%;
+}
+
+.map-legend {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    min-width: 150px;
+}
+
+.map-legend h4 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.legend-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.legend-icon.scenic { background: #ff6b6b; }
+.legend-icon.food { background: #4ecdc4; }
+.legend-icon.hotel { background: #45b7d1; }
+.legend-icon.transport { background: #96ceb4; }
+
+/* 景点卡片 */
+.attractions-section {
+    background: white;
+    padding: 60px 0;
+    border-radius: 20px;
+    margin: 40px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.attractions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.attraction-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.attraction-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.attraction-card:hover .card-image img {
+    transform: scale(1.05);
+}
+
+.card-overlay {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.card-tag {
+    background: rgba(102, 126, 234, 0.9);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.card-content {
+    padding: 25px;
+}
+
+.card-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.card-content p {
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.card-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-info span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.card-info .rating {
+    color: #ff6b6b;
+    font-weight: 600;
+}
+
+/* 实用信息 */
+.tips-section {
+    background: white;
+    padding: 60px 0;
+    border-radius: 20px;
+    margin: 40px 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.tip-card {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 15px;
+    border-left: 5px solid #667eea;
+    transition: transform 0.3s ease;
+}
+
+.tip-card:hover {
+    transform: translateY(-3px);
+}
+
+.tip-card h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.tip-card ul {
+    list-style: none;
+}
+
+.tip-card li {
+    padding: 8px 0;
+    color: #666;
+    border-bottom: 1px solid #eee;
+    transition: color 0.3s ease;
+}
+
+.tip-card li:hover {
+    color: #667eea;
+}
+
+.tip-card li:last-child {
+    border-bottom: none;
+}
+
+/* 页脚 */
+.footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 40px 0;
+    margin-top: 60px;
+}
+
+.footer p {
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .trip-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .nav-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .nav-link {
+        padding: 15px 20px;
+    }
+    
+    .day-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .timeline {
+        padding-left: 20px;
+    }
+    
+    .timeline-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .timeline-time {
+        min-width: auto;
+    }
+    
+    .attraction-info {
+        justify-content: center;
+    }
+    
+    .card-info {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .map-legend {
+        position: static;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .hero-section {
+        padding: 60px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    section h2 {
+        font-size: 2rem;
+    }
+    
+    .weather-grid,
+    .attractions-grid,
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .day-content,
+    .tip-card {
+        padding: 20px;
+    }
+}
+
+/* 打印样式 */
+@media print {
+    .navigation,
+    .map-section {
+        display: none;
+    }
+    
+    .hero-section {
+        background: #667eea;
+        color: white;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    .day-card,
+    .weather-card,
+    .attraction-card,
+    .tip-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    h1 { font-size: 24pt; }
+    h2 { font-size: 20pt; }
+    h3 { font-size: 16pt; }
+    h4 { font-size: 14pt; }
+}
+    </style>
+</head>
+<body>
+    <!-- 英雄区域 -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1><i class="fas fa-map-marked-alt"></i> 徐州三日游攻略</h1>
+                <p class="hero-subtitle">探索汉文化发源地，品味千年古城魅力</p>
+                <div class="trip-info">
+                    <div class="info-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>2025年7月28日-30日</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>3天2夜</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-thermometer-half"></i>
+                        <span>25-32°C</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 导航栏 -->
+    <nav class="navigation">
+        <div class="container">
+            <div class="nav-container">
+                <a href="#weather" class="nav-link">
+                    <i class="fas fa-cloud-sun"></i>
+                    <span>天气预报</span>
+                </a>
+                <a href="#itinerary" class="nav-link">
+                    <i class="fas fa-route"></i>
+                    <span>行程规划</span>
+                </a>
+                <a href="#map" class="nav-link">
+                    <i class="fas fa-map"></i>
+                    <span>地图导览</span>
+                </a>
+                <a href="#attractions" class="nav-link">
+                    <i class="fas fa-camera"></i>
+                    <span>景点推荐</span>
+                </a>
+                <a href="#tips" class="nav-link">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>实用信息</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="main-content">
+        <!-- 天气预报 -->
+        <section id="weather" class="weather-section">
+            <div class="container">
+                <h2><i class="fas fa-cloud-sun"></i> 天气预报</h2>
+                <div class="weather-grid">
+                    <div class="weather-card">
+                        <div class="weather-date">7月28日 (周一)</div>
+                        <div class="weather-icon">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <div class="weather-desc">晴</div>
+                        <div class="weather-temp">25°C / 32°C</div>
+                        <div class="weather-wind">东南风 3-4级</div>
+                    </div>
+                    <div class="weather-card">
+                        <div class="weather-date">7月29日 (周二)</div>
+                        <div class="weather-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <div class="weather-desc">多云</div>
+                        <div class="weather-temp">26°C / 31°C</div>
+                        <div class="weather-wind">东南风 3-4级</div>
+                    </div>
+                    <div class="weather-card">
+                        <div class="weather-date">7月30日 (周三)</div>
+                        <div class="weather-icon">
+                            <i class="fas fa-cloud-rain"></i>
+                        </div>
+                        <div class="weather-desc">小雨</div>
+                        <div class="weather-temp">24°C / 29°C</div>
+                        <div class="weather-wind">东南风 3-4级</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 行程规划 -->
+        <section id="itinerary" class="itinerary-section">
+            <div class="container">
+                <h2><i class="fas fa-route"></i> 详细行程</h2>
+                
+                <!-- 第一天 -->
+                <div class="day-card">
+                    <div class="day-header">
+                        <h3>第一天：云龙湖风光 + 徐州博物馆</h3>
+                        <div class="day-date">7月28日</div>
+                    </div>
+                    <div class="day-content">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-time">09:00</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-water"></i> 云龙湖景区</h4>
+                                    <p>徐州最大的城市湖泊，环湖漫步，欣赏湖光山色。可以租自行车环湖骑行，或乘坐游船观光。</p>
+                                    <div class="attraction-info">
+                                        <span class="rating"><i class="fas fa-star"></i> 4.5分</span>
+                                        <span class="time"><i class="fas fa-clock"></i> 3小时</span>
+                                        <span class="price"><i class="fas fa-ticket-alt"></i> 免费</span>
+                                        <span class="location"><i class="fas fa-map-marker-alt"></i> 云龙区</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">12:30</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-utensils"></i> 午餐：云龙湖畔餐厅</h4>
+                                    <p>品尝徐州特色菜肴，推荐地锅鸡、羊方藏鱼等当地名菜。</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">14:00</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-university"></i> 徐州博物馆</h4>
+                                    <p>了解徐州悠久的历史文化，特别是汉代文物收藏，包括金缕玉衣、汉代兵马俑等珍贵文物。</p>
+                                    <div class="attraction-info">
+                                        <span class="rating"><i class="fas fa-star"></i> 4.8分</span>
+                                        <span class="time"><i class="fas fa-clock"></i> 2.5小时</span>
+                                        <span class="price"><i class="fas fa-ticket-alt"></i> 50元</span>
+                                        <span class="location"><i class="fas fa-map-marker-alt"></i> 云龙区</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">18:00</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-building"></i> 户部山古建筑群</h4>
+                                    <p>漫步明清古街，感受历史韵味，品尝街边小吃。</p>
+                                    <div class="attraction-info">
+                                        <span class="rating"><i class="fas fa-star"></i> 4.8分</span>
+                                        <span class="time"><i class="fas fa-clock"></i> 2小时</span>
+                                        <span class="price"><i class="fas fa-ticket-alt"></i> 免费</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第二天 -->
+                <div class="day-card">
+                    <div class="day-header">
+                        <h3>第二天：汉文化景区深度游</h3>
+                        <div class="day-date">7月29日</div>
+                    </div>
+                    <div class="day-content">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-time">08:30</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-mountain"></i> 徐州汉文化景区</h4>
+                                    <p>参观狮子山楚王陵、汉兵马俑博物馆，深度了解汉代文化。这里是徐州最重要的历史文化景区。</p>
+                                    <div class="attraction-info">
+                                        <span class="rating"><i class="fas fa-star"></i> 4.6分</span>
+                                        <span class="time"><i class="fas fa-clock"></i> 4小时</span>
+                                        <span class="price"><i class="fas fa-ticket-alt"></i> 120元</span>
+                                        <span class="location"><i class="fas fa-map-marker-alt"></i> 鼓楼区</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">12:30</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-utensils"></i> 午餐：景区内餐厅</h4>
+                                    <p>在景区内用餐，继续下午的游览。</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">14:00</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-mountain"></i> 云龙山</h4>
+                                    <p>登山俯瞰徐州全景，参观兴化寺、放鹤亭等古迹。</p>
+                                    <div class="attraction-info">
+                                        <span class="rating"><i class="fas fa-star"></i> 4.4分</span>
+                                        <span class="time"><i class="fas fa-clock"></i> 2小时</span>
+                                        <span class="price"><i class="fas fa-ticket-alt"></i> 免费</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">18:00</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-moon"></i> 户部山夜游</h4>
+                                    <p>夜晚的户部山别有一番风味，古建筑在灯光映衬下更显古朴典雅。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 第三天 -->
+                <div class="day-card">
+                    <div class="day-header">
+                        <h3>第三天：文化体验 + 休闲时光</h3>
+                        <div class="day-date">7月30日</div>
+                    </div>
+                    <div class="day-content">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-time">09:00</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-landmark"></i> 城下城遗址博物馆</h4>
+                                    <p>探索徐州地下的古城遗址，了解城市的历史变迁。</p>
+                                    <div class="attraction-info">
+                                        <span class="rating"><i class="fas fa-star"></i> 4.3分</span>
+                                        <span class="time"><i class="fas fa-clock"></i> 2小时</span>
+                                        <span class="price"><i class="fas fa-ticket-alt"></i> 30元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">11:30</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-road"></i> 回龙窝历史文化街区</h4>
+                                    <p>漫步历史街区，购买特色纪念品，感受老徐州的生活气息。</p>
+                                    <div class="attraction-info">
+                                        <span class="rating"><i class="fas fa-star"></i> 4.2分</span>
+                                        <span class="time"><i class="fas fa-clock"></i> 2小时</span>
+                                        <span class="price"><i class="fas fa-ticket-alt"></i> 免费</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">14:00</div>
+                                <div class="timeline-content">
+                                    <h4><i class="fas fa-water"></i> 云龙湖休闲时光</h4>
+                                    <p>在云龙湖畔享受悠闲时光，可以在湖边咖啡厅小憩，为旅程画下完美句号。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 地图导览 -->
+        <section id="map" class="map-section">
+            <div class="container">
+                <h2><i class="fas fa-map"></i> 地图导览</h2>
+                <div class="map-container">
+                    <div id="amap-container"></div>
+                    <div class="map-legend">
+                        <h4>图例</h4>
+                        <div class="legend-item">
+                            <div class="legend-icon scenic"></div>
+                            <span>景点</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-icon food"></div>
+                            <span>美食</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-icon hotel"></div>
+                            <span>住宿</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-icon transport"></div>
+                            <span>交通</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 景点推荐 -->
+        <section id="attractions" class="attractions-section">
+            <div class="container">
+                <h2><i class="fas fa-camera"></i> 精选景点</h2>
+                <div class="attractions-grid">
+                    <div class="attraction-card">
+                        <div class="card-image">
+                            <img src="https://pic.616pic.com/ys_img/00/13/86/ZjJhOWJkZGQ5.jpg" alt="云龙湖">
+                            <div class="card-overlay">
+                                <span class="card-tag">AAAA级</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3>云龙湖</h3>
+                            <p>徐州最大的城市湖泊，湖光山色美不胜收，是市民休闲娱乐的好去处。</p>
+                            <div class="card-info">
+                                <span class="rating"><i class="fas fa-star"></i> 4.5</span>
+                                <span><i class="fas fa-ticket-alt"></i> 免费</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <div class="card-image">
+                            <img src="https://pic.616pic.com/ys_img/00/13/86/ZjJhOWJkZGQ5.jpg" alt="徐州博物馆">
+                            <div class="card-overlay">
+                                <span class="card-tag">文化</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3>徐州博物馆</h3>
+                            <p>收藏丰富的汉代文物，包括金缕玉衣、汉代兵马俑等珍贵展品。</p>
+                            <div class="card-info">
+                                <span class="rating"><i class="fas fa-star"></i> 4.8</span>
+                                <span><i class="fas fa-ticket-alt"></i> 50元</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <div class="card-image">
+                            <img src="https://pic.616pic.com/ys_img/00/13/86/ZjJhOWJkZGQ5.jpg" alt="汉文化景区">
+                            <div class="card-overlay">
+                                <span class="card-tag">AAAA级</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3>徐州汉文化景区</h3>
+                            <p>以汉代文化为主题的大型景区，包含狮子山楚王陵、汉兵马俑博物馆等。</p>
+                            <div class="card-info">
+                                <span class="rating"><i class="fas fa-star"></i> 4.6</span>
+                                <span><i class="fas fa-ticket-alt"></i> 120元</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <div class="card-image">
+                            <img src="https://pic.616pic.com/ys_img/00/13/86/ZjJhOWJkZGQ5.jpg" alt="户部山">
+                            <div class="card-overlay">
+                                <span class="card-tag">古建筑</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3>户部山古建筑群</h3>
+                            <p>明清古建筑群，保存完好的古街道，体验传统文化和民俗风情。</p>
+                            <div class="card-info">
+                                <span class="rating"><i class="fas fa-star"></i> 4.8</span>
+                                <span><i class="fas fa-ticket-alt"></i> 免费</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实用信息 -->
+        <section id="tips" class="tips-section">
+            <div class="container">
+                <h2><i class="fas fa-lightbulb"></i> 实用信息</h2>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h3><i class="fas fa-plane"></i> 交通指南</h3>
+                        <ul>
+                            <li>徐州观音国际机场：距市区约40公里</li>
+                            <li>徐州东站：高铁站，交通便利</li>
+                            <li>市内交通：地铁、公交、出租车</li>
+                            <li>建议：下载高德地图导航</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <h3><i class="fas fa-utensils"></i> 美食推荐</h3>
+                        <ul>
+                            <li>地锅鸡：徐州特色名菜</li>
+                            <li>羊方藏鱼：传统名菜</li>
+                            <li>蜜三刀：特色糕点</li>
+                            <li>烙馍：当地小吃</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <h3><i class="fas fa-bed"></i> 住宿建议</h3>
+                        <ul>
+                            <li>云龙区：靠近云龙湖，环境优美</li>
+                            <li>市中心：交通便利，购物方便</li>
+                            <li>价格区间：200-800元/晚</li>
+                            <li>建议提前预订</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <h3><i class="fas fa-exclamation-triangle"></i> 注意事项</h3>
+                        <ul>
+                            <li>夏季注意防晒和补水</li>
+                            <li>景区门票建议网上预订</li>
+                            <li>保管好个人财物</li>
+                            <li>紧急电话：110、120、119</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 徐州旅游攻略 | 基于高德地图API制作</p>
+            <p>祝您旅途愉快！</p>
+        </div>
+    </footer>
+
+    <script>
+// 地图初始化和交互功能
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化高德地图
+    initMap();
+    
+    // 平滑滚动导航
+    initSmoothScroll();
+    
+    // 添加滚动动画
+    initScrollAnimations();
+    
+    // 添加交互效果
+    initInteractiveEffects();
+});
+
+// 初始化地图
+function initMap() {
+    // 检查是否有高德地图API
+    if (typeof AMap === 'undefined') {
+        console.warn('高德地图API未加载，请检查API密钥');
+        document.getElementById('amap-container').innerHTML = 
+            '<div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f0f0f0; color: #666; font-size: 16px; flex-direction: column; text-align: center; padding: 20px;">' +
+            '<i class="fas fa-map-marked-alt" style="font-size: 48px; margin-bottom: 20px; color: #667eea;"></i>' +
+            '<h3 style="margin-bottom: 10px;">地图功能需要配置API密钥</h3>' +
+            '<p style="margin-bottom: 15px;">请访问 <a href="https://console.amap.com/" target="_blank" style="color: #667eea;">高德开放平台</a> 获取免费API密钥</p>' +
+            '<p style="font-size: 14px; color: #999;">配置后即可查看完整的旅游路线地图</p>' +
+            '</div>';
+        return;
+    }
+
+    // 创建地图实例
+    const map = new AMap.Map('amap-container', {
+        zoom: 12,
+        center: [117.187935, 34.257784], // 徐州市中心
+        mapStyle: 'amap://styles/light'
+    });
+
+    // 景点数据
+    const attractions = [
+        {
+            name: '云龙湖',
+            position: [117.143363, 34.241093],
+            type: 'scenic',
+            description: '徐州最大的城市湖泊，风景秀丽',
+            icon: 'fas fa-water'
+        },
+        {
+            name: '徐州博物馆',
+            position: [117.186653, 34.251058],
+            type: 'scenic',
+            description: '收藏丰富的汉代文物',
+            icon: 'fas fa-university'
+        },
+        {
+            name: '徐州汉文化景区',
+            position: [117.221212, 34.247083],
+            type: 'scenic',
+            description: '汉代文化主题景区',
+            icon: 'fas fa-mountain'
+        },
+        {
+            name: '户部山',
+            position: [117.187935, 34.257784],
+            type: 'scenic',
+            description: '明清古建筑群',
+            icon: 'fas fa-building'
+        },
+        {
+            name: '老家地锅',
+            position: [117.186653, 34.251058],
+            type: 'food',
+            description: '正宗徐州地锅鸡',
+            icon: 'fas fa-utensils'
+        }
+    ];
+
+    // 添加标记点
+    attractions.forEach(attraction => {
+        const marker = new AMap.Marker({
+            position: attraction.position,
+            title: attraction.name,
+            icon: createCustomIcon(attraction.type, attraction.icon)
+        });
+
+        // 添加信息窗口
+        const infoWindow = new AMap.InfoWindow({
+            content: createInfoWindowContent(attraction),
+            offset: new AMap.Pixel(0, -30)
+        });
+
+        marker.on('click', function() {
+            infoWindow.open(map, marker.getPosition());
+        });
+
+        map.add(marker);
+    });
+
+    // 绘制旅游路线
+    drawTourRoute(map, attractions);
+
+    // 添加地图控件
+    map.addControl(new AMap.Scale());
+    map.addControl(new AMap.ToolBar());
+}
+
+// 创建自定义图标
+function createCustomIcon(type, iconClass) {
+    const colors = {
+        scenic: '#ff6b6b',
+        food: '#4ecdc4',
+        hotel: '#45b7d1',
+        transport: '#96ceb4'
+    };
+
+    const iconHtml = `
+        <div style="
+            width: 40px;
+            height: 40px;
+            background: ${colors[type]};
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 3px solid white;
+        ">
+            <i class="${iconClass}"></i>
+        </div>
+    `;
+
+    return new AMap.Icon({
+        content: iconHtml,
+        size: new AMap.Size(40, 40),
+        imageOffset: new AMap.Pixel(-20, -20)
+    });
+}
+
+// 创建信息窗口内容
+function createInfoWindowContent(attraction) {
+    return `
+        <div style="padding: 15px; min-width: 200px;">
+            <h3 style="margin: 0 0 10px 0; color: #333; font-size: 16px;">
+                <i class="${attraction.icon}" style="margin-right: 8px; color: #667eea;"></i>
+                ${attraction.name}
+            </h3>
+            <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.4;">
+                ${attraction.description}
+            </p>
+        </div>
+    `;
+}
+
+// 绘制旅游路线
+function drawTourRoute(map, attractions) {
+    const scenicAttractions = attractions.filter(a => a.type === 'scenic');
+    const path = scenicAttractions.map(a => a.position);
+
+    const polyline = new AMap.Polyline({
+        path: path,
+        strokeColor: '#667eea',
+        strokeWeight: 4,
+        strokeOpacity: 0.8,
+        strokeStyle: 'solid',
+        strokeDasharray: [10, 5]
+    });
+
+    map.add(polyline);
+}
+
+// 平滑滚动导航
+function initSmoothScroll() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                const offsetTop = targetElement.offsetTop - 80;
+                
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+                
+                // 更新活动状态
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+}
+
+// 滚动动画
+function initScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // 观察需要动画的元素
+    const animatedElements = document.querySelectorAll(
+        '.day-card, .weather-card, .attraction-card, .tip-card'
+    );
+
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+}
+
+// 交互效果
+function initInteractiveEffects() {
+    // 天气卡片点击效果
+    const weatherCards = document.querySelectorAll('.weather-card');
+    weatherCards.forEach(card => {
+        card.addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    });
+
+    // 景点卡片悬停效果
+    const attractionCards = document.querySelectorAll('.attraction-card');
+    attractionCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 20px 50px rgba(0,0,0,0.2)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.1)';
+        });
+    });
+
+    // 添加返回顶部按钮
+    createBackToTopButton();
+}
+
+// 创建返回顶部按钮
+function createBackToTopButton() {
+    const backToTopBtn = document.createElement('button');
+    backToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+    backToTopBtn.className = 'back-to-top';
+    backToTopBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    `;
+
+    document.body.appendChild(backToTopBtn);
+
+    // 滚动显示/隐藏按钮
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.style.opacity = '1';
+            backToTopBtn.style.visibility = 'visible';
+        } else {
+            backToTopBtn.style.opacity = '0';
+            backToTopBtn.style.visibility = 'hidden';
+        }
+    });
+
+    // 点击返回顶部
+    backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // 悬停效果
+    backToTopBtn.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.1)';
+    });
+
+    backToTopBtn.addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1)';
+    });
+}
+    </script>
+</body>
+</html>
